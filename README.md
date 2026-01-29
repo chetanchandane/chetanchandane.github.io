@@ -4,7 +4,7 @@
 
 ## What is this?
 
-This simple portfolio template is designed to showcase your past projects, career history, skill sets, and more.
+This simple portfolio template is designed to showcase my past projects, career history, skill sets, and more.
 
 View the [Demo](https://yujisatojr.github.io/react-portfolio-template/).
 
@@ -14,7 +14,6 @@ View the [Demo](https://yujisatojr.github.io/react-portfolio-template/).
 
 ## Features
 
-✅ Open source (free to use, no attribution required)  
 ✅ Responsive design & mobile-friendly  
 ✅ Supports both dark and light modes  
 ✅ Highly customizable multi-component layout  
@@ -46,7 +45,7 @@ View the [Demo](https://yujisatojr.github.io/react-portfolio-template/).
 
 The page will reload if you make edits, and you will see any lint errors in the console.
 
-If you are interested in creating a mockup image like the ones from the personal projects section, I recommend [Genmoo](https://gemoo.com/tools/browser-mockup-generator/). This website lets you generate sleek looking browser mockups for free.
+If you are interested in creating a mockup image like the ones from the personal projects section, I recommend [Gemini](https://gemini.google.com/). This website lets you generate sleek looking browser mockups for free.
 
 ## Deployment
 
