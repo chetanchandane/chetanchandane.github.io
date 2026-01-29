@@ -6,7 +6,7 @@
 
 This simple portfolio template is designed to showcase my past projects, career history, skill sets, and more.
 
-View the [My Portfolio](https://chetanchandane.github.io/)
+View the [My Portfolio](https://chetanchandane.vercel.app/)
 
 
 ![screenshot](./src/assets//images/screenshot.png)
