@@ -5,7 +5,7 @@ import aws_mock01 from '../assets/images/aws_mock01.png';
 import ml_mock01 from '../assets/images/ml_mock01.png';
 import ml_mock02 from '../assets/images/ml_mock02.png';
 import aws_mock02 from '../assets/images/aws_mock02.png';
-// import mock07 from '../assets/images/mock07.png';
+import triage_ai from '../assets/images/triage_ai.png';
 // import mock08 from '../assets/images/mock08.png';
 // import mock09 from '../assets/images/mock09.png';
 // import mock10 from '../assets/images/mock10.png';
@@ -26,6 +26,11 @@ function Project() {
                 <a href="https://github.com/chetanchandane/agentic-github2blog" target="_blank" rel="noreferrer"><img src={mock02} className="zoom" alt="thumbnail" width="100%"/></a>
                 <a href="https://github.com/chetanchandane/agentic-github2blog" target="_blank" rel="noreferrer"><h2>Git2Blog Agentic AI</h2></a>
                 <p>Automated pipeline built with LangGraph that analyzes GitHub repos, generates technical blog posts with AI, and publishes them directly to DEV.to</p>
+            </div>
+            <div className="project">
+                <a href="https://www.github.com/chetanchandane/TriageAI" target="_blank" rel="noreferrer"><img src={triage_ai} className="zoom" alt="thumbnail" width="100%"/></a>
+                <a href="https://www.github.com/chetanchandane/TriageAI" target="_blank" rel="noreferrer"><h2>Triage AI (Work in Progress)</h2></a>
+                <p>An autonomous, multi-agent AI system designed to transform free-text patient messages into structured clinical actions.</p>
             </div>
             {/* AWS */}
             <div className="project">
