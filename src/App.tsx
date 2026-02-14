@@ -5,6 +5,7 @@ import {
   Expertise,
   Project,
   Contact,
+  ChatTab,
   Navigation,
   Footer,
 } from "./components";
@@ -31,6 +32,7 @@ function App() {
         <Navigation parentToChild={{mode}} modeChange={handleModeChange}/>
         <FadeIn transitionDuration={700}>
             <Main/>
+            <ChatTab/>
             <Expertise/>
             <Timeline/>
             <Project/>
