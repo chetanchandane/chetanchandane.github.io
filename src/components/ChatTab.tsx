@@ -46,12 +46,16 @@ function saveMessages(messages: ChatMessage[]) {
   }
 }
 
+const MOBILE_BREAKPOINT = 768;
+
 function ChatTab() {
   const [messages, setMessages] = useState<ChatMessage[]>(() => loadMessages());
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isChatExpanded, setIsChatExpanded] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     saveMessages(messages);
@@ -131,14 +135,42 @@ function ChatTab() {
     setError(null);
   };
 
+  const handleInputFocus = () => {
+    if (typeof window !== "undefined" && window.innerWidth <= MOBILE_BREAKPOINT) {
+      setIsChatExpanded(true);
+    }
+  };
+
+  const handleCollapseChat = () => {
+    setIsChatExpanded(false);
+    inputRef.current?.blur();
+  };
+
   return (
-    <div id="ask-chetan" className="chat-tab">
+    <div id="ask-chetan" className={`chat-tab${isChatExpanded ? " chat-tab--expanded" : ""}`}>
       <div className="items-container">
         <div className="chat-tab-wrapper">
-          <h1>Ask Chetan</h1>
-          <p className="chat-tab-subtitle">
-            Ask me about my background, experience, or projects. Answers are based only on my portfolio knowledge base.
-          </p>
+          {isChatExpanded && (
+            <div className="chat-tab-expanded-header">
+              <h2 className="chat-tab-expanded-title">Ask Chetan</h2>
+              <button
+                type="button"
+                className="chat-tab-expanded-done"
+                onClick={handleCollapseChat}
+                aria-label="Minimize chat"
+              >
+                Done
+              </button>
+            </div>
+          )}
+          {!isChatExpanded && (
+            <>
+              <h1>Ask Chetan</h1>
+              <p className="chat-tab-subtitle">
+                Ask me about my background, experience, or projects. Answers are based only on my portfolio knowledge base.
+              </p>
+            </>
+          )}
 
           <div className="chat-tab-main">
             <div className="chat-messages" ref={listRef}>
@@ -256,11 +288,13 @@ function ChatTab() {
 
             <form className="chat-input-row" onSubmit={handleSubmit}>
               <input
+                ref={inputRef}
                 type="text"
                 className="chat-input"
                 placeholder="Ask anything about my background or projects..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
+                onFocus={handleInputFocus}
                 disabled={isTyping}
                 aria-label="Message"
               />
