@@ -1,4 +1,3 @@
-const { GoogleGenAI } = require("@google/genai");
 const { KNOWLEDGE_BASE } = require("../knowledgeBase");
 
 // Exact message when the answer is not in the knowledge base (no hallucination).
@@ -91,6 +90,7 @@ module.exports = async function handler(req, res) {
   }
 
   const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+  const { GoogleGenAI } = await import("@google/genai");
   const ai = new GoogleGenAI({ apiKey });
 
   // Stable prefix for context: systemInstruction (instructions + KB) first; then conversation.
