@@ -4,8 +4,6 @@
  * Success: "Where does Chetan go to school?" should yield an answer that includes "RIT".
  */
 
-const handler = require("./api/chat");
-
 const testMessages = [
   { role: "user", content: "Where does Chetan go to school?" },
 ];
@@ -40,7 +38,12 @@ const res = {
   },
 };
 
-handler(req, res).catch((err) => {
+async function run() {
+  const { default: handler } = await import("./api/chat.js");
+  await handler(req, res);
+}
+
+run().catch((err) => {
   console.error("Handler error:", err);
   process.exit(1);
 });

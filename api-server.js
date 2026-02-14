@@ -6,21 +6,21 @@
 require("dotenv").config();
 
 const express = require("express");
-const chatHandler = require("./api/chat");
-
 const app = express();
 const PORT = process.env.API_PORT || 3001;
 
 app.use(express.json());
 
-app.post("/api/chat", (req, res) => {
-  chatHandler(req, res);
-});
+async function start() {
+  const { default: chatHandler } = await import("./api/chat.js");
+  app.post("/api/chat", (req, res) => chatHandler(req, res));
+  app.listen(PORT, "127.0.0.1", () => {
+    console.log(`Ask Chetan API running at http://localhost:${PORT}`);
+    console.log(`  POST /api/chat`);
+    if (!process.env.GEMINI_API_KEY) {
+      console.warn("  Warning: GEMINI_API_KEY is not set. Requests will fail with 500.");
+    }
+  });
+}
 
-app.listen(PORT, "127.0.0.1", () => {
-  console.log(`Ask Chetan API running at http://localhost:${PORT}`);
-  console.log(`  POST /api/chat`);
-  if (!process.env.GEMINI_API_KEY) {
-    console.warn("  Warning: GEMINI_API_KEY is not set. Requests will fail with 500.");
-  }
-});
+start();

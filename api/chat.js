@@ -1,6 +1,12 @@
-const { KNOWLEDGE_BASE } = require("../knowledgeBase");
+import path from "path";
+import { fileURLToPath } from "url";
+import { createRequire } from "module";
+import { GoogleGenAI } from "@google/genai";
 
-// Exact message when the answer is not in the knowledge base (no hallucination).
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const require = createRequire(import.meta.url);
+const { KNOWLEDGE_BASE } = require(path.join(__dirname, "..", "knowledgeBase.js"));
+
 const FALLBACK_MESSAGE =
   "That isn't in my knowledge base — ask me about my background, experience, or projects and I'll tell you! 😊";
 
@@ -53,7 +59,6 @@ function validateMessages(messages) {
   return { ok: true };
 }
 
-/** Map frontend messages (user/assistant) to Gemini contents (user/model with parts). */
 function toGeminiContents(messages) {
   return messages.map((m) => ({
     role: m.role === "assistant" ? "model" : "user",
@@ -61,42 +66,39 @@ function toGeminiContents(messages) {
   }));
 }
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   res.setHeader("Content-Type", "application/json");
 
-  if (req.method !== "POST") {
-    res.status(405).json({ error: "Method not allowed" });
-    return;
-  }
-
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    res.status(500).json({ error: "GEMINI_API_KEY is not configured" });
-    return;
-  }
-
-  let body;
   try {
-    body = typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
-  } catch {
-    res.status(400).json({ error: "Invalid JSON body" });
-    return;
-  }
+    if (req.method !== "POST") {
+      res.status(405).json({ error: "Method not allowed" });
+      return;
+    }
 
-  const validation = validateMessages(body.messages);
-  if (!validation.ok) {
-    res.status(validation.status).json({ error: validation.error });
-    return;
-  }
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      res.status(500).json({ error: "GEMINI_API_KEY is not configured" });
+      return;
+    }
 
-  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
-  const { GoogleGenAI } = await import("@google/genai");
-  const ai = new GoogleGenAI({ apiKey });
+    let body;
+    try {
+      body = typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
+    } catch {
+      res.status(400).json({ error: "Invalid JSON body" });
+      return;
+    }
 
-  // Stable prefix for context: systemInstruction (instructions + KB) first; then conversation.
-  const contents = toGeminiContents(body.messages);
+    const validation = validateMessages(body.messages);
+    if (!validation.ok) {
+      res.status(validation.status).json({ error: validation.error });
+      return;
+    }
 
-  try {
+    const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+    const ai = new GoogleGenAI({ apiKey });
+    const contents = toGeminiContents(body.messages);
+
     const response = await ai.models.generateContent({
       model,
       contents,
@@ -114,9 +116,10 @@ module.exports = async function handler(req, res) {
       message: { role: "assistant", content },
     });
   } catch (err) {
-    console.error("Gemini API error:", err.message);
+    console.error("Chat API error:", err.message);
+    console.error(err.stack);
     res.status(500).json({
-      error: err.message || "Failed to get response from the model",
+      error: err.message || "Internal server error",
     });
   }
-};
+}
