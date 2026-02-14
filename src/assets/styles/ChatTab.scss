@@ -563,16 +563,26 @@
       flex-direction: column;
       min-height: 0;
       max-width: 100%;
+      padding-top: 52px; // room for fixed header
     }
 
+    // Fixed header so "Done" stays visible when keyboard is open
     .chat-tab-expanded-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1001;
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0.75rem 1rem;
+      padding-top: calc(0.75rem + env(safe-area-inset-top, 0));
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       background: #0d1116;
+      min-height: 52px;
+      box-sizing: border-box;
     }
 
     .chat-tab-expanded-title {
@@ -582,20 +592,30 @@
       font-family: "Lato", sans-serif;
     }
 
-    .chat-tab-expanded-done {
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      font-family: inherit;
-      font-weight: 500;
-      color: #5000ca;
-      background: transparent;
+    .chat-tab-close-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      margin: 0 -0.25rem 0 0;
       border: none;
+      border-radius: 50%;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.85);
       cursor: pointer;
-      border-radius: 8px;
       -webkit-tap-highlight-color: transparent;
+      transition: background 0.15s, color 0.15s;
 
-      &:hover {
-        background: rgba(80, 0, 202, 0.15);
+      svg {
+        font-size: 1.5rem;
+      }
+
+      &:hover,
+      &:active {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
       }
     }
 
@@ -626,9 +646,15 @@
       flex-shrink: 0;
     }
 
+    .chat-input-area {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+
     .chat-input-row {
       flex-shrink: 0;
-      padding-bottom: env(safe-area-inset-bottom, 0);
     }
   }
 
@@ -640,10 +666,12 @@
       border-bottom-color: rgba(0, 0, 0, 0.08);
     }
 
-    .chat-tab-expanded-done {
-      color: #5000ca;
-      &:hover {
-        background: rgba(80, 0, 202, 0.1);
+    .chat-tab-close-btn {
+      color: rgba(0, 0, 0, 0.7);
+      &:hover,
+      &:active {
+        background: rgba(0, 0, 0, 0.08);
+        color: #0d1116;
       }
     }
   }

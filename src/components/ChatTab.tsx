@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import SendIcon from "@mui/icons-material/Send";
+import CloseIcon from "@mui/icons-material/Close";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import EmailIcon from "@mui/icons-material/Email";
@@ -155,11 +156,11 @@ function ChatTab() {
               <h2 className="chat-tab-expanded-title">Ask Chetan</h2>
               <button
                 type="button"
-                className="chat-tab-expanded-done"
+                className="chat-tab-close-btn"
                 onClick={handleCollapseChat}
-                aria-label="Minimize chat"
+                aria-label="Close chat and go back to site"
               >
-                Done
+                <CloseIcon />
               </button>
             </div>
           )}
@@ -286,27 +287,29 @@ function ChatTab() {
               )}
             </div>
 
-            <form className="chat-input-row" onSubmit={handleSubmit}>
-              <input
-                ref={inputRef}
-                type="text"
-                className="chat-input"
-                placeholder="Ask anything about my background or projects..."
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onFocus={handleInputFocus}
-                disabled={isTyping}
-                aria-label="Message"
-              />
-              <button
-                type="submit"
-                className="chat-send-btn"
-                disabled={isTyping || !input.trim()}
-                aria-label="Send"
-              >
-                <SendIcon />
-              </button>
-            </form>
+            <div className="chat-input-area">
+              <form className="chat-input-row" onSubmit={handleSubmit}>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  className="chat-input"
+                  placeholder="Ask anything about my background or projects..."
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onFocus={handleInputFocus}
+                  disabled={isTyping}
+                  aria-label="Message"
+                />
+                <button
+                  type="submit"
+                  className="chat-send-btn"
+                  disabled={isTyping || !input.trim()}
+                  aria-label="Send"
+                >
+                  <SendIcon />
+                </button>
+              </form>
+            </div>
 
             {error && (
               <div className="chat-error" role="alert">
