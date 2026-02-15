@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import SendIcon from "@mui/icons-material/Send";
-import CloseIcon from "@mui/icons-material/Close";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import EmailIcon from "@mui/icons-material/Email";
@@ -55,8 +54,18 @@ function ChatTab() {
   const [isTyping, setIsTyping] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isChatExpanded, setIsChatExpanded] = useState(false);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth <= MOBILE_BREAKPOINT : false
+  );
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   useEffect(() => {
     saveMessages(messages);
@@ -136,16 +145,21 @@ function ChatTab() {
     setError(null);
   };
 
+  const handleCloseChat = () => {
+    if (isTyping) return;
+    setMessages([]);
+    setError(null);
+    setIsChatExpanded(false);
+    inputRef.current?.blur();
+  };
+
   const handleInputFocus = () => {
     if (typeof window !== "undefined" && window.innerWidth <= MOBILE_BREAKPOINT) {
       setIsChatExpanded(true);
     }
   };
 
-  const handleCollapseChat = () => {
-    setIsChatExpanded(false);
-    inputRef.current?.blur();
-  };
+  const showCloseOrClear = isMobile ? (isChatExpanded || messages.length > 0) : messages.length > 0;
 
   return (
     <div id="ask-chetan" className={`chat-tab${isChatExpanded ? " chat-tab--expanded" : ""}`}>
@@ -154,14 +168,6 @@ function ChatTab() {
           {isChatExpanded && (
             <div className="chat-tab-expanded-header">
               <h2 className="chat-tab-expanded-title">Ask Chetan</h2>
-              <button
-                type="button"
-                className="chat-tab-close-btn"
-                onClick={handleCollapseChat}
-                aria-label="Close chat and go back to site"
-              >
-                <CloseIcon />
-              </button>
             </div>
           )}
           {!isChatExpanded && (
@@ -274,15 +280,15 @@ function ChatTab() {
                   <EmailIcon />
                 </a>
               </div>
-              {messages.length > 0 && (
+              {showCloseOrClear && (
                 <button
                   type="button"
                   className="chat-clear-btn"
-                  onClick={handleClearChat}
+                  onClick={isMobile ? handleCloseChat : handleClearChat}
                   disabled={isTyping}
-                  aria-label="Clear chat"
+                  aria-label={isMobile ? "Close chat and go back to site" : "Clear chat"}
                 >
-                  Clear chat
+                  {isMobile ? "Close chat" : "Clear chat"}
                 </button>
               )}
             </div>
