@@ -20,7 +20,7 @@ function Main() {
             <a href="https://medium.com/@chetanchandane013" target="_blank" rel="noreferrer"><img src={medium} alt="Medium" style={{width: '30px', height: '30px'}} /></a>
           </div>
           <h1>Chetan Chandane</h1>
-          <p>Software Engineer</p>
+          <p>AI Engineer | Full Stack</p>
 
           <div className="mobile_social_icons">
             <a href="https://github.com/chetanchandane" target="_blank" rel="noreferrer"><GitHubIcon/></a>

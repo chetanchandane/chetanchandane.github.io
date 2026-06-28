@@ -58,9 +58,10 @@ const KNOWLEDGE_BASE = `
 
 ## Profile
 - **Name:** Chetan Chandane
-- **Title:** Software Engineer
-- **Education / School:** Rochester Institute of Technology (RIT)
-- **Links:** GitHub (https://github.com/chetanchandane), LinkedIn (https://www.linkedin.com/in/chetanchandane/), Medium (https://medium.com/@chetanchandane013)
+- **Title:** AI Engineer | Full Stack
+- **Focus:** Building production GenAI and agentic AI systems (LLMs, RAG, multi-agent workflows) and shipping them as full-stack cloud products.
+- **Education / School:** Rochester Institute of Technology (RIT), MS Computer Science
+- **Links:** GitHub (https://github.com/chetanchandane), LinkedIn (https://www.linkedin.com/in/chetanchandane/), Medium (https://medium.com/@chetanchandane013), Email address (chetan.chandane2026@gmail.com)
 
 ## Relevant Coursework
 - Artificial Intelligence
@@ -74,11 +75,11 @@ const KNOWLEDGE_BASE = `
 
 ## Career History
 
-### Full Stack Engineer Intern — Excellus Blue Cross Blue Shield (2025 – Current)
+### Full Stack Engineer Intern — Excellus Blue Cross Blue Shield (Sept 2025 – May 2026)
 - Frontend Development, Backend Development
 - **Stack at Excellus:** Angular, ASP.NET, Azure
 
-### Machine Learning Engineer — Rochester Institute of Technology (2024 – 2025)
+### Machine Learning Engineer — Rochester Institute of Technology (Dec 2024 – July 2025)
 - Machine Learning, Data Analysis, Predictive Modeling
 
 ### Software Engineer — Vodafone Intelligent Solutions, Pune, India (Oct 2020 – Jun 2023)
@@ -97,9 +98,10 @@ const KNOWLEDGE_BASE = `
 - CI/CD, automated testing, containerized deployments
 - Tech: Git, GitHub Actions, Docker, Terraform, AWS, Azure, Azure DevOps, Linux, Pandas
 
-### GenAI & LLM
-- Semantic search, RAG pipelines, LLM-powered automation, LangSmith
-- Tech: OpenAI, Groq, LangChain, LangGraph, Qdrant, Hugging Face, Streamlit
+### GenAI, LLM & Agentic AI
+- Production RAG (HyDE, hybrid BM25/dense retrieval, RRF fusion, cross-encoder reranking), multi-agent/agentic systems, MCP tool layers, LLM-powered automation.
+- Rigorous LLM evaluation and observability: Ragas metrics (Faithfulness, Answer Relevancy, Context Precision/Recall), LLM-as-judge, LangSmith tracing, CI quality gates.
+- Tech: Anthropic Claude, OpenAI, Google Gemini, LangChain, LangGraph, LangSmith, Ragas, Cohere Rerank, Qdrant, ChromaDB, Pinecone, Groq, Hugging Face, FastAPI, Streamlit
 
 ### Databases
 - Postgres, MySQL, MongoDB, Supabase, AWS DynamoDB, Azure Cosmos DB
@@ -145,31 +147,63 @@ const KNOWLEDGE_BASE = `
 
 ---
 
-### 🏥 TriageAI — Agentic Patient Portal Triage System (RIT Capstone)
-**Aliases:** Agentic Patient Portal, AI triage portal, multi-agent triage system  
-**Stack / Skills:** LangGraph (multi-agent state machine), Gemini 2.5 Flash (Google GenAI SDK), LangSmith (tracing/eval), Streamlit (patient + staff portals), Supabase Postgres (profiles/messages + RLS), Pydantic schemas, optional in-memory demo mode
+### 🏥 TriageAI — Agentic Clinical Triage System (RIT Master's Capstone)
+**Status:** Completed.
+**Aliases:** Agentic Patient Portal, AI triage portal, multi-agent triage system, clinical triage agent
+**Repo:** https://github.com/chetanchandane/TriageAI
+**Stack / Skills:** LangGraph (cyclic agentic state machine, HITL interrupt/resume, SqliteSaver persistence), Gemini 2.5 Pro (reasoning/tool calling/vision), MCP (Model Context Protocol tool layer), ChromaDB (policy RAG), Supabase/PostgreSQL (auth + profiles + RLS), LangSmith (observability), Streamlit (patient chat + staff dashboard), Resend (email), Pydantic schemas
 
 **What it is (idea):**
-- Autonomous **agentic AI** system that transforms free-text **patient portal messages** into structured clinical actions:
-  - triage intent + urgency
-  - route to clinical queues
-  - produce structured summaries/checklists (policy-grounded drafts/checklists are described as a goal; parts are planned)
+- Autonomous **multi-agent AI system** that triages free-text **patient portal messages** with clinical-grade safety, grounding every decision in **patient history** and **hospital policy** before a human reviews it.
+- Emulates a triage nurse's investigative workflow: it reads the message, retrieves history and policy via MCP tools, asks follow-up questions when info is missing, then produces a structured assessment.
+
+**Results / impact (quantified):**
+- **100% Safety Recall** across 159 safety-screened messages — zero missed emergencies (no false negatives).
+- **84% reduction in false positives** vs a keyword baseline, solving alert fatigue without sacrificing recall.
+- **93.1% precision** on the adversarial set; caught **27/27 adversarial traps** (silent strokes, atypical MIs, CO poisoning with no keywords).
+- **100% urgency ±1 accuracy** and **90% exact urgency match** on the tricky-message run; consistent failure mode is safe over-escalation by one level, never under-escalation.
+- Load-tested over **640 LangGraph runs**, ~**1.63M tokens (~$3.16)**, median reasoning depth **4,730 tokens/message**, **P50 latency 10.18s**, traced end-to-end in LangSmith.
 
 **How I did it (implementation):**
-- Built a **Streamlit** app with login/register and persistent patient identity context (patient ID, name, email).
-- Implemented two views:
-  - **Patient view:** submit messages + see triage result and personal history
-  - **Staff view:** see all patient messages grouped by patient identity with triage results
-- Defined a structured output schema (\`TriageResult\`) with intent, urgency, summary, checklist, and recommended queue.
-- Storage is configurable:
-  - Supabase-backed (tables + RLS via \`supabase_schema.sql\`)
-  - in-memory demo mode (no persistence after restart)
-- Target agent architecture includes planned agents (Safety Agent, Policy Agent (RAG via ChromaDB), and Human-in-the-loop).
+- Built a **cyclic LangGraph state machine**: Safety Gate → agentic reasoning loop (tool calls + checklist) → synthesis → policy-grounded draft reply → human-in-the-loop staff review → email delivery.
+- Exposed tools via **MCP** (\`get_patient_history\`, \`search_hospital_policy\` (ChromaDB RAG), \`get_available_slots\`) so data sources (e.g. swapping Supabase for an HL7 FHIR/EHR endpoint) can change without touching agent logic.
+- Implemented **human-in-the-loop** using LangGraph \`interrupt()\` for NORMAL/HIGH/EMERGENCY messages; state persisted via \`SqliteSaver\` so a paused workflow survives server restarts.
+- Built **Streamlit** UIs (patient streaming chat + staff dashboard with pending approvals) and structured Pydantic outputs (\`SafetyResult\`, \`TriageResult\`).
 
 **RAG-friendly Q&A anchors:**
-- “How is it agentic?” → LangGraph multi-agent state machine + structured output
-- “How do patient/staff experiences differ?” → two-tab Streamlit UI with identity + grouping
-- “What’s implemented vs planned?” → triage agent implemented; safety/policy RAG/HITL listed as planned
+- “How is it agentic?” → cyclic LangGraph state machine with tool-calling loop + checklist gate
+- “How is it safe?” → 100% safety recall, 84% fewer false positives, over-escalates rather than under-escalates
+- “Why MCP?” → decoupled tool layer so EHR/data sources swap without changing agent logic
+- “What did the load test show?” → 640 runs, ~1.63M tokens, P50 10.18s, fully traced in LangSmith
+
+---
+
+### 🧪 Clinical Trial Compliance RAG — Production RAG over FDA/ICH Regulations
+**Status:** Completed / deployed.
+**Aliases:** Clinical Trial RAG, Compliance RAG, FDA/ICH RAG, regulatory RAG, clinical-trial-compliance-rag
+**Repo:** https://github.com/chetanchandane/rag
+**Stack / Skills:** FastAPI + Uvicorn, Anthropic Claude (generation \`claude-sonnet-4-6\`, HyDE drafting, Haiku as eval judge), OpenAI \`text-embedding-3-small\` (dense) + fastembed BM25 (sparse), HyDE query expansion, RRF fusion (k=60), Cohere \`rerank-english-v3.0\` cross-encoder, Qdrant Cloud (hybrid collection), LangSmith (per-stage tracing), Ragas 0.4 (eval), GitHub Actions (CI quality gate), Docker + Render, vanilla JS/CSS UI
+
+**What it is (idea):**
+- Production-grade **Retrieval-Augmented Generation** system for querying **FDA and ICH clinical-trial regulatory documents**. Ask compliance questions in plain English and get grounded, **fully source-cited** answers (document + page) — built for an accuracy-critical domain where hallucinations carry real regulatory and patient-safety risk.
+
+**Results / impact (quantified, 294-question golden eval set):**
+- **79% Faithfulness** and **75% Answer Relevancy** (Ragas) with full source citations.
+- Advanced retrieval lifted **Context Precision +37%** (0.59 → 0.80) and **Context Recall +24%** (0.72 → 0.89) over a dense-only baseline.
+- End-to-end latency: **median 15.2s**, p95 18.9s; retrieval (embed + hybrid search + rerank) totals under **1s** — generation and HyDE dominate.
+- **GitHub Actions CI gate** blocks any PR that regresses below thresholds (Faithfulness ≥0.70, Relevancy ≥0.70, Precision ≥0.60, Recall ≥0.60).
+
+**How I did it (implementation):**
+- Retrieval pipeline: **HyDE** (Claude drafts a hypothetical regulatory passage) → **hybrid search** (OpenAI dense + BM25 sparse, top-20 each, concurrent against Qdrant) → **RRF fusion** (k=60) → **Cohere cross-encoder rerank** (20 → 5).
+- Generation: **Claude** answers strictly from retrieved context with inline citations.
+- Observability: every stage (\`embed_query\`, \`hybrid_search\`, \`rerank\`, \`generate\`) auto-traced to LangSmith with latency and token counts.
+- Evaluation: automated **Ragas** harness (4 metrics, LLM-as-judge) generating a synthetic golden dataset and logging LangSmith Experiments, wired into CI; deployed on Docker + Render.
+
+**RAG-friendly Q&A anchors:**
+- “How does the retrieval pipeline work?” → HyDE → hybrid BM25/dense → RRF fusion → Cohere rerank (20→5)
+- “How did you measure quality?” → Ragas 4 metrics on a 294-question golden set, +37% precision / +24% recall over dense baseline
+- “How do you prevent regressions?” → GitHub Actions CI gate on Ragas thresholds, full LangSmith tracing
+- “Why is it safe for compliance?” → strictly grounded, fully source-cited answers (document + page)
 
 ---
 
@@ -271,35 +305,36 @@ const KNOWLEDGE_BASE = `
 ### 💬 Ask Chetan — Portfolio AI Chatbot
 **Aliases:** Ask Chetan, portfolio chatbot, Digital Twin, ChetanAI, portfolio chat  
 **Live:** https://chetanchandane.vercel.app  
-**Stack / Skills:** React, TypeScript, SCSS, MUI (Material-UI) icons, react-markdown, sessionStorage, Vercel serverless functions (Node.js), Express (local dev), Google Gemini 2.5 Flash (@google/genai), context-injection / RAG-lite (no vector DB), dotenv
+**Stack / Skills:** React, TypeScript, SCSS, MUI (Material-UI) icons, react-markdown, sessionStorage, Vercel serverless functions (Node.js), Express (local dev), Anthropic Claude Haiku (@anthropic-ai/sdk), context-injection / RAG-lite (no vector DB), dotenv
 
 **What it is (idea):**
 - AI chatbot embedded in my portfolio that answers visitor questions in **first person** (as me), using only a curated **knowledge base** — no hallucination. Visitors can ask about my background, experience, projects, or tech stack; the bot responds in a fun, professional tone with optional emojis.
 
 **How I did it (implementation):**
 - **Frontend:** Chat UI (ChatTab) with message bubbles, typing indicator, quick-question buttons, Clear chat, and social links (LinkedIn, GitHub, Medium, Gmail). Messages and chat history persisted in **sessionStorage** so they survive tab switches. Markdown rendering for assistant replies via react-markdown. Placed the chat section right below the hero so visitors see it immediately.
-- **Backend:** Vercel serverless \`api/chat.js\` that validates input (roles, message count/size caps), injects a system prompt + full knowledge base into each request (prompt-caching friendly), and calls **Gemini 2.5 Flash** with low temperature. Strict fallback message when the answer isn’t in the KB. For local dev, added an **Express** server (\`api-server.js\`) that mounts the same handler and runs on port 3001, with Create React App proxy so \`/api/chat\` works.
+- **Backend:** Vercel serverless \`api/chat.js\` that validates input (roles, message count/size caps), injects a system prompt + full knowledge base into each request (prompt-caching friendly), and calls **Anthropic Claude Haiku** (\`@anthropic-ai/sdk\`) with low temperature. Strict fallback message when the answer isn’t in the KB. For local dev, added an **Express** server (\`api-server.js\`) that mounts the same handler and runs on port 3001, with Create React App proxy so \`/api/chat\` works.
 - **Knowledge base:** Single \`knowledgeBase.js\` (Markdown string) as the single source of truth; no vector DB — “RAG-lite” context injection. Prompt instructs the model to answer only from the KB and to respond in first person with a mentor-like tone.
 
 **Problems we ran into and how we solved them:**
 - **Backend not available locally:** With only \`npm start\`, the React app ran but \`/api/chat\` didn’t exist (no serverless on CRA). We added a small Express server (\`npm run api\`) and a \`proxy\` in \`package.json\` so the frontend forwards \`/api/chat\` to localhost:3001.
-- **Gemini ignoring the knowledge base:** The model replied as if it had no context. The \`@google/genai\` SDK expects \`systemInstruction\` inside \`config\`, not as a top-level parameter. We moved \`systemInstruction\` into \`config\` so the KB and instructions were actually sent.
+- **Grounding the model on the knowledge base:** Early on the model replied as if it had no context. I send the full knowledge base as the \`system\` prompt on every request and keep temperature low, so the assistant answers only from the KB and falls back to a fixed message when something isn't covered.
 - **Chat window scrolling off-screen on send:** \`scrollIntoView\` on the messages end was scrolling the **whole page**, pushing the chat section out of view. We switched to scrolling only the messages container: \`listRef.current.scrollTop = listRef.current.scrollHeight\`.
 - **Social/action button colors disappearing in light mode:** A generic \`.light-mode .chat-social-link\` rule was applied after the branded overrides (LinkedIn blue, GitHub black, Gmail red), so it overwrote them. We reordered the CSS so the branded modifier classes (e.g. \`--linkedin\`, \`--gmail\`) come **after** the base light-mode rule and retain their colors.
-- **GEMINI_API_KEY not loaded for local API:** The Create React App dev server doesn’t run the API; the separate Node process didn’t load \`.env\`. We added \`dotenv\` and \`require('dotenv').config()\` at the top of \`api-server.js\` so the key is loaded when running \`npm run api\`.
+- **ANTHROPIC_API_KEY not loaded for local API:** The Create React App dev server doesn’t run the API; the separate Node process didn’t load \`.env\`. We added \`dotenv\` and \`require('dotenv').config()\` at the top of \`api-server.js\` so the key is loaded when running \`npm run api\`.
 - **Raw errors (e.g. 503) shown to users:** We replaced all API-failure UI with a single in-chat assistant message (e.g. “Something went wrong on the backend, my human self has been notified, please email me”) and log the real error to the console for debugging.
 
 **RAG-friendly Q&A anchors (what to ask me):**
-- “Tell me about your portfolio chatbot” / “Ask Chetan” → RAG-lite, Gemini 2.5 Flash, first-person, sessionStorage, Vercel serverless
-- “What problems did you hit building the chatbot?” → systemInstruction in config, scrollIntoView vs container scroll, light-mode CSS order, dotenv for local API, generic error message in UI
-- “What’s the tech stack for Ask Chetan?” → React, TypeScript, SCSS, MUI, react-markdown, Vercel serverless, Express (local), Gemini 2.5 Flash, knowledgeBase.js, no vector DB
+- “Tell me about your portfolio chatbot” / “Ask Chetan” → RAG-lite, Anthropic Claude Haiku, first-person, sessionStorage, Vercel serverless
+- “What problems did you hit building the chatbot?” → grounding the model on the KB via the system prompt, scrollIntoView vs container scroll, light-mode CSS order, dotenv for local API, generic error message in UI
+- “What’s the tech stack for Ask Chetan?” → React, TypeScript, SCSS, MUI, react-markdown, Vercel serverless, Express (local), Anthropic Claude Haiku, knowledgeBase.js, no vector DB
 
 ---
 
 ## Additional Projects (brief)
+- **Clinical Trial Compliance RAG:** Production RAG over FDA/ICH regulations with fully source-cited answers; 79% Faithfulness / 75% Answer Relevancy (Ragas), +37% Context Precision and +24% Context Recall via HyDE + hybrid BM25/dense + RRF + Cohere reranking. FastAPI, Qdrant, Claude, GitHub Actions CI gate. Repo: https://github.com/chetanchandane/rag
+- **Triage AI:** Completed multi-agent (cyclic LangGraph) clinical triage system; 100% safety recall and 84% fewer false positives vs keyword baseline, MCP tools + ChromaDB policy RAG + human-in-the-loop, traced over 640 runs in LangSmith. Repo: https://github.com/chetanchandane/TriageAI
 - **Nutri AI:** Serverless nutrition platform; analyzes food images and calculates nutrients using React, AWS, and GPT-4o.
 - **Git2Blog Agentic AI:** LangGraph pipeline that analyzes GitHub repos, generates technical blog posts with AI, and publishes to DEV.to.
-- **Triage AI (WIP):** Multi-agent AI system to transform free-text patient messages into structured clinical actions.
 - **AWS Containerized Blog:** Containerized WordPress + MySQL with Docker; deployment via AWS ECR.
 - **AWS SecureOps:** End-to-end infrastructure automation (Ansible, Bash, Terraform).
 - **Deep Learning Image Synthesis (ML):** VGG19-based Neural Style Transfer with PyTorch.

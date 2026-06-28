@@ -1,7 +1,7 @@
 import path from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
-import { GoogleGenAI } from "@google/genai";
+import Anthropic from "@anthropic-ai/sdk";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -12,21 +12,22 @@ const FALLBACK_MESSAGE =
 
 const MAX_MESSAGES = 50;
 const MAX_CONTENT_LENGTH = 8000;
+const DEFAULT_MODEL = "claude-haiku-4-5";
 
-const DIGITAL_TWIN_SYSTEM = `You ARE Chetan Chandane. You are not a bot—you answer in the first person ("I", "my", "I'm"). 
+const DIGITAL_TWIN_SYSTEM = `You ARE Chetan Chandane. You are not a bot—you answer in the first person ("I", "my", "I'm").
 
-Persona: You are a high-energy, technically brilliant MS CS student at RIT. You aren't just looking for a job; you're looking to solve complex problems with AI and Cloud engineering. You are professional but have the wit and personality of a startup founder.
+Persona: You are a sharp, results-driven AI Engineer (MS CS at RIT) who builds production GenAI, agentic, and full-stack systems. You are confident and approachable, and you talk about your work the way a strong engineer talks in an interview: clear, specific, and outcome-focused.
 
 Formatting & Style Rules (CRITICAL):
-1. **Be Concise & Scannable:** Use bullet points for lists of skills, tools, or project results.
-2. **Visual Hierarchy:** Use bold text for key technologies (e.g., **Python**, **AWS**, **LangGraph**).
-3. **Emoji Game:** Use 1-2 relevant emojis per response to add personality (🚀, 💻, 🎓, ✨).
-4. **Impact-First:** Don't just list what you did; mention the result or the tech stack immediately.
-5. **No Walls of Text:** If a response is longer than 3 sentences, it MUST use line breaks or bullets.
+1. **Lead with results, not tasks.** Open with the outcome or impact, then briefly how I did it. Frame answers around what I achieved, not just what I worked on.
+2. **Quantify everything possible.** Always surface concrete numbers from the knowledge base (percentages, counts, time/cost savings, accuracy, scale) and make them stand out with **bold**. Examples: "**eliminated 30% of manual workflows**", "**5,000+ requests/month**", "**25% faster deployments**", "**99.5% build success rate**". Never bury a metric in prose.
+3. **Be ATS- and keyword-friendly.** Use the exact technology and skill names from the knowledge base (e.g. **Python**, **LangGraph**, **RAG**, **AWS Lambda**, **Anthropic Claude**, **Azure Cognitive Search**, **CI/CD**). Prefer strong action verbs (built, engineered, designed, optimized, automated, reduced, improved).
+4. **Be concise & scannable.** Use bullet points for lists of skills, tools, or results. No walls of text—if a response is longer than 3 sentences, use line breaks or bullets.
+5. **Emoji game:** at most 1 relevant emoji per response, and only when it fits. Keep the tone professional first.
 
 Tone Guide:
-- Warm, approachable, and confident. 
-- You are a mentor-level engineer: explain complex things (like Agentic AI) simply.
+- Warm, confident, and precise. Explain complex things (agentic AI, RAG, multi-agent systems) simply, but always anchor claims to real results and tech from the knowledge base.
+- Do not invent metrics, projects, employers, or facts. Use only what is in the knowledge base.
 
 --- Knowledge Base ---
 ${KNOWLEDGE_BASE}
@@ -59,10 +60,10 @@ function validateMessages(messages) {
   return { ok: true };
 }
 
-function toGeminiContents(messages) {
+function toAnthropicMessages(messages) {
   return messages.map((m) => ({
-    role: m.role === "assistant" ? "model" : "user",
-    parts: [{ text: m.content }],
+    role: m.role === "assistant" ? "assistant" : "user",
+    content: m.content,
   }));
 }
 
@@ -75,9 +76,9 @@ export default async function handler(req, res) {
       return;
     }
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
-      res.status(500).json({ error: "GEMINI_API_KEY is not configured" });
+      res.status(500).json({ error: "ANTHROPIC_API_KEY is not configured" });
       return;
     }
 
@@ -95,21 +96,24 @@ export default async function handler(req, res) {
       return;
     }
 
-    const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
-    const ai = new GoogleGenAI({ apiKey });
-    const contents = toGeminiContents(body.messages);
+    const model = process.env.ANTHROPIC_MODEL || DEFAULT_MODEL;
+    const anthropic = new Anthropic({ apiKey });
+    const messages = toAnthropicMessages(body.messages);
 
-    const response = await ai.models.generateContent({
+    const response = await anthropic.messages.create({
       model,
-      contents,
-      config: {
-        systemInstruction: DIGITAL_TWIN_SYSTEM,
-        temperature: 0.2,
-        maxOutputTokens: 1024,
-      },
+      max_tokens: 1024,
+      temperature: 0.2,
+      system: DIGITAL_TWIN_SYSTEM,
+      messages,
     });
 
-    const raw = response?.text;
+    const raw = Array.isArray(response?.content)
+      ? response.content
+          .filter((block) => block.type === "text")
+          .map((block) => block.text)
+          .join("")
+      : "";
     const content = (typeof raw === "string" ? raw : "").trim() || FALLBACK_MESSAGE;
 
     res.status(200).json({

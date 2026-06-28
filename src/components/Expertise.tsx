@@ -98,44 +98,48 @@ import Chip from '@mui/material/Chip';
 import '../assets/styles/Expertise.scss';
 
 const labelsFirst = [
+    "OpenAI",
+    "Anthropic Claude",
+    "Google Gemini",
+    "LangChain",
+    "LangGraph",
+    "LangSmith",
+    "RAG",
+    "Agentic AI",
+    "Hugging Face",
+    "Groq",
+    "Qdrant",
+    "ChromaDB",
+    "Pinecone",
+    "Streamlit",
+];
+
+const labelsSecond = [
+    "Python",
+    "PyTorch",
+    "Scikit-learn",
+    "Pandas",
+    "NumPy",
+    "Predictive Modeling",
+    "Computer Vision",
+    "Data Analysis",
+    "Vector Search",
+    "Prompt Engineering",
+];
+
+const labelsThird = [
     "React",
     "Angular",
     "ASP.NET",
     "Node.js",
     "TypeScript",
-    "JavaScript",
-    "HTML5",
-    "CSS3",
-    "SASS",
-    "Flask",
     "Python",
-    "SQL",
-    "PostgreSQL",
-    "Postman",
-    "Java",
-    "C#",
-];
-
-const labelsSecond = [
-    "Git",
-    "GitHub Actions",
-    "Docker",
-    "Terraform",
     "AWS",
     "Azure",
-    "Azure DevOps",
-    "Linux",
-    "Pandas",
-];
-
-const labelsThird = [
-    "OpenAI",
-    "Groq",
-    "LangChain",
-    "LangGraph",
-    "Qdrant",
-    "Hugging Face",
-    "Streamlit",
+    "Docker",
+    "Terraform",
+    "PostgreSQL",
+    "CI/CD",
 ];
 
 function Expertise() {
@@ -145,11 +149,11 @@ function Expertise() {
             <h1>Expertise</h1>
             <div className="skills-grid">
                 <div className="skill">
-                    <FontAwesomeIcon icon={faReact} size="3x"/>
-                    <h3>Full Stack Web Development</h3>
+                    <FontAwesomeIcon icon={faPython} size="3x"/>
+                    <h3>GenAI & Agentic Systems</h3>
                     <p>
-                        I build end-to-end web applications—from clean, responsive UIs in Angular to secure, scalable APIs in .NET.
-                        I’m comfortable across the full SDLC, including architecture, development, testing, and production readiness.
+                        I design and ship production GenAI systems: multi-agent workflows, RAG pipelines, and LLM-powered automation.
+                        I focus on evaluation, latency and cost trade-offs, and grounding models so they stay accurate and reliable.
                     </p>
                     <div className="flex-chips">
                         <span className="chip-title">Tech stack:</span>
@@ -160,11 +164,11 @@ function Expertise() {
                 </div>
 
                 <div className="skill">
-                    <FontAwesomeIcon icon={faDocker} size="3x"/>
-                    <h3>DevOps & Automation</h3>
+                    <FontAwesomeIcon icon={faReact} size="3x"/>
+                    <h3>Machine Learning & Data</h3>
                     <p>
-                        I streamline delivery with CI/CD, automated testing, and containerized deployments.
-                        My focus is on repeatable releases, reliable environments, and faster feedback loops from build to production.
+                        I build and evaluate ML models end to end, from data analysis and feature work to deep learning and predictive modeling.
+                        I care about clean pipelines, measurable accuracy, and turning data into decisions.
                     </p>
                     <div className="flex-chips">
                         <span className="chip-title">Tech stack:</span>
@@ -175,11 +179,11 @@ function Expertise() {
                 </div>
 
                 <div className="skill">
-                    <FontAwesomeIcon icon={faPython} size="3x"/>
-                    <h3>GenAI & LLM</h3>
+                    <FontAwesomeIcon icon={faDocker} size="3x"/>
+                    <h3>Full Stack & Cloud Engineering</h3>
                     <p>
-                        I build practical GenAI features like semantic search, RAG pipelines, and LLM-powered automation.
-                        I focus on evaluation, latency/cost trade-offs, and production-ready integrations—not just prototypes.
+                        I ship AI features as real products: responsive UIs, scalable APIs, and serverless cloud backends on AWS and Azure.
+                        I own the full SDLC, including CI/CD, containerized deployments, and production readiness.
                     </p>
                     <div className="flex-chips">
                         <span className="chip-title">Tech stack:</span>

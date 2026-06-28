@@ -17,13 +17,13 @@ const QUICK_QUESTIONS = [
   "Which stack did you use at Excellus?",
 ];
 
-const GMAIL_TO = "cc5831@g.rit.edu";
+const GMAIL_TO = "chetan.chandane2026@gmail.com";
 const GMAIL_SUBJECT = "Introduction — Let's connect";
 const GMAIL_BODY = "Hi Chetan,\n\nI came across your portfolio and would like to connect.";
 const GMAIL_COMPOSE_URL = `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(GMAIL_TO)}&subject=${encodeURIComponent(GMAIL_SUBJECT)}&body=${encodeURIComponent(GMAIL_BODY)}`;
 
 const BACKEND_ERROR_MESSAGE =
-  "Hey, interesting question! Looks like something went wrong — an error has occurred on the backend. My human self has been notified of this. Please email me if you'd like to discuss further.";
+  "Hey, interesting question! Looks like something went wrong — an error has occurred on the backend. My human self has been notified of this. Please email me at chetan.chandane2026@gmail.com if you'd like to discuss further.";
 
 export type ChatMessage = { role: "user" | "assistant"; content: string };
 

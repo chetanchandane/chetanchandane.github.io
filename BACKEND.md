@@ -6,12 +6,12 @@ The chat view talks to **`/api/chat`**. If you see no reply or an error, the bac
 
 ## 1. Set the API key
 
-The backend uses **Gemini**. You need a key from [Google AI Studio](https://aistudio.google.com/apikey).
+The backend uses **Anthropic Claude (Haiku)**. You need a key from the [Anthropic Console](https://console.anthropic.com/settings/keys).
 
 **Option A – Environment variable (recommended)**
 
 ```bash
-export GEMINI_API_KEY=your_key_here
+export ANTHROPIC_API_KEY=your_key_here
 ```
 
 **Option B – `.env` in the project root**
@@ -19,10 +19,10 @@ export GEMINI_API_KEY=your_key_here
 Create a file `.env` (it’s in `.gitignore`) with:
 
 ```
-GEMINI_API_KEY=your_key_here
+ANTHROPIC_API_KEY=your_key_here
 ```
 
-If you use **Vercel**, set `GEMINI_API_KEY` in the project’s Environment variables in the dashboard.
+If you use **Vercel**, set `ANTHROPIC_API_KEY` in the project’s Environment variables in the dashboard.
 
 ---
 
@@ -65,7 +65,7 @@ You have two ways to run the API so the chat view gets responses.
    vercel dev
    ```
 
-   This runs both the React app and the serverless `api/chat` handler. Set `GEMINI_API_KEY` in the environment (export or `.env`) before running.
+   This runs both the React app and the serverless `api/chat` handler. Set `ANTHROPIC_API_KEY` in the environment (export or `.env`) before running.
 
 ---
 
@@ -74,7 +74,7 @@ You have two ways to run the API so the chat view gets responses.
 **Quick test (no UI):**
 
 ```bash
-GEMINI_API_KEY=your_key node test-chat-api.js
+ANTHROPIC_API_KEY=your_key node test-chat-api.js
 ```
 
 You should see a short reply that mentions RIT for “Where does Chetan go to school?”.
@@ -88,8 +88,8 @@ Open the Ask Chetan section, send a message. If the API is running and the key i
 
 1. Push your code and connect the repo to Vercel (or deploy with `vercel`).
 2. In the Vercel project, go to **Settings → Environment variables** and add:
-   - **Name:** `GEMINI_API_KEY`
-   - **Value:** your Gemini API key
+   - **Name:** `ANTHROPIC_API_KEY`
+   - **Value:** your Anthropic API key
 3. Redeploy so the function gets the new variable.
 
 Then `https://your-app.vercel.app/api/chat` will be used by the chat view in production.
@@ -102,5 +102,5 @@ Then `https://your-app.vercel.app/api/chat` will be used by the chat view in pro
 |------------------------|----------------------------------------------------------------------------|
 | Local dev, chat works  | Nothing; you already have API + key running.                               |
 | “No reply” / API error | Start backend: `npm run api` in one terminal, `npm start` in another.      |
-| Missing key            | Set `GEMINI_API_KEY` (export or `.env`).                                   |
-| Production (Vercel)    | Set `GEMINI_API_KEY` in Vercel env vars and deploy.                        |
+| Missing key            | Set `ANTHROPIC_API_KEY` (export or `.env`).                                |
+| Production (Vercel)    | Set `ANTHROPIC_API_KEY` in Vercel env vars and deploy.                     |

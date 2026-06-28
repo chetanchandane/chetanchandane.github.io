@@ -1,6 +1,6 @@
 /**
  * Local test for the Digital Twin API (Phase 1).
- * Run: GEMINI_API_KEY=your_key node test-chat-api.js
+ * Run: ANTHROPIC_API_KEY=your_key node test-chat-api.js
  * Success: "Where does Chetan go to school?" should yield an answer that includes "RIT".
  */
 
