@@ -24,6 +24,11 @@ const navItems = [
   ['Ask Chetan', 'ask-chetan'],
   ['Contact', 'contact'],
 ];
+const RESUME_URL = "https://drive.google.com/file/d/1TKDmjTvnT6v5Tk6BVFpwcqPruIkYPq0i/view?usp=sharing";
+const GMAIL_TO = "chetan.chandane2026@gmail.com";
+const GMAIL_SUBJECT = "Introduction — Let's connect";
+const GMAIL_BODY = "Hi Chetan,\n\nI came across your portfolio and would like to connect.";
+const GMAIL_COMPOSE_URL = `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(GMAIL_TO)}&subject=${encodeURIComponent(GMAIL_SUBJECT)}&body=${encodeURIComponent(GMAIL_BODY)}`;
 
 function Navigation({parentToChild, modeChange}: any) {
 
@@ -72,6 +77,28 @@ function Navigation({parentToChild, modeChange}: any) {
             </ListItemButton>
           </ListItem>
         ))}
+        <ListItem disablePadding>
+          <ListItemButton
+            component="a"
+            href={RESUME_URL}
+            target="_blank"
+            rel="noreferrer"
+            sx={{ textAlign: 'center' }}
+          >
+            <ListItemText primary="Resume" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton
+            component="a"
+            href={GMAIL_COMPOSE_URL}
+            target="_blank"
+            rel="noreferrer"
+            sx={{ textAlign: 'center' }}
+          >
+            <ListItemText primary="Email" />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );
@@ -101,6 +128,22 @@ function Navigation({parentToChild, modeChange}: any) {
                 {item[0]}
               </Button>
             ))}
+            <Button
+              href={RESUME_URL}
+              target="_blank"
+              rel="noreferrer"
+              sx={{ color: '#fff' }}
+            >
+              Resume
+            </Button>
+            <Button
+              href={GMAIL_COMPOSE_URL}
+              target="_blank"
+              rel="noreferrer"
+              sx={{ color: '#fff' }}
+            >
+              Email
+            </Button>
           </Box>
         </Toolbar>
       </AppBar>
