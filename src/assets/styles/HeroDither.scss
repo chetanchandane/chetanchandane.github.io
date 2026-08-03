@@ -1,0 +1,27 @@
+.hero-dither {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background-color: #0b0d10;
+    // pre-dithered still (set inline via PUBLIC_URL): shown immediately and if the
+    // sprite sheet / JS never loads
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 0;
+
+    &__canvas {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 0.6s ease;
+    }
+
+    // once the sheet has loaded and the canvas is painting, fade it over the poster
+    &--ready &__canvas {
+        opacity: 1;
+    }
+}

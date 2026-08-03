@@ -7,6 +7,8 @@ import ml_mock01 from '../assets/images/ml_mock01.png';
 import ml_mock02 from '../assets/images/ml_mock02.png';
 import aws_mock02 from '../assets/images/aws_mock02.png';
 import triage_ai from '../assets/images/triage_ai.png';
+import bhartix from '../assets/images/bhartix.jpg';
+import doc_stream from '../assets/images/doc_stream.jpg';
 // import mock08 from '../assets/images/mock08.png';
 // import mock09 from '../assets/images/mock09.png';
 // import mock10 from '../assets/images/mock10.png';
@@ -15,8 +17,25 @@ import '../assets/styles/Project.scss';
 function Project() {
     return(
     <div className="projects-container" id="projects">
-        <h1>Personal Projects</h1>
+        <div className="section-head">
+            <span className="eyebrow">Selected work</span>
+            <h1>Personal Projects</h1>
+        </div>
         <div className="projects-grid">
+            {/* commercial / client work */}
+            <div className="project">
+                <a href="https://bhartix.com" target="_blank" rel="noreferrer"><img src={bhartix} className="zoom" alt="BhartiX website" width="100%"/></a>
+                <a href="https://bhartix.com" target="_blank" rel="noreferrer"><h2>BhartiX — Export Trade Platform</h2></a>
+                <p>A commercial website built end to end for a real client — BhartiX, a government-certified Indian agri-exporter. Product catalog, company profile, quote-request flows, and an admin portal, designed and shipped to production.</p>
+                <p className="tech-stack"><span className="tech-label">Tech: </span>React · TypeScript · Vite · Responsive Web · SEO · Production</p>
+            </div>
+            {/* distributed AI systems */}
+            <div className="project">
+                <a href="https://github.com/chetanchandane/doc-stream" target="_blank" rel="noreferrer"><img src={doc_stream} className="zoom" alt="DocStream" width="100%"/></a>
+                <a href="https://github.com/chetanchandane/doc-stream" target="_blank" rel="noreferrer"><h2>DocStream — Distributed AI Doc Pipeline</h2></a>
+                <p>Event-driven, distributed document-intelligence platform: a FastAPI gateway streams documents over Kafka to scalable Python microservices that extract, embed, classify, and summarize, then serves grounded, cited RAG answers through a CQRS read API — with transactional outbox, idempotent consumers, and dead-letter retries.</p>
+                <p className="tech-stack"><span className="tech-label">Tech: </span>Python · FastAPI · Kafka · Kubernetes · Helm · PostgreSQL · Qdrant · S3/MinIO · Claude · Prometheus</p>
+            </div>
             {/* agentic AI / GenAI */}
             <div className="project">
                 <a href="https://github.com/chetanchandane/rag" target="_blank" rel="noreferrer"><img src={mock04} className="zoom" alt="thumbnail" width="100%"/></a>

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "cra-dev",
+      "runtimeExecutable": "env",
+      "runtimeArgs": ["BROWSER=none", "PORT=3000", "CI=false", "npm", "start"],
+      "port": 3000
+    }
+  ]
+}

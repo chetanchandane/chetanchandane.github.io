@@ -3,11 +3,9 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import LightModeIcon from '@mui/icons-material/LightMode';
 import List from '@mui/material/List';
 import ListIcon from '@mui/icons-material/List';
 import ListItem from '@mui/material/ListItem';
@@ -15,13 +13,13 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
+import '../assets/styles/Navigation.scss';
 
 const drawerWidth = 240;
 const navItems = [
   ['Expertise', 'expertise'],
   ['History', 'history'],
   ['Projects', 'projects'],
-  ['Ask Chetan', 'ask-chetan'],
   ['Contact', 'contact'],
 ];
 const RESUME_URL = "https://drive.google.com/file/d/1TKDmjTvnT6v5Tk6BVFpwcqPruIkYPq0i/view?usp=sharing";
@@ -30,9 +28,7 @@ const GMAIL_SUBJECT = "Introduction — Let's connect";
 const GMAIL_BODY = "Hi Chetan,\n\nI came across your portfolio and would like to connect.";
 const GMAIL_COMPOSE_URL = `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(GMAIL_TO)}&subject=${encodeURIComponent(GMAIL_SUBJECT)}&body=${encodeURIComponent(GMAIL_BODY)}`;
 
-function Navigation({parentToChild, modeChange}: any) {
-
-  const {mode} = parentToChild;
+function Navigation({ onAskChetan }: { onAskChetan: () => void }) {
 
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
@@ -43,15 +39,9 @@ function Navigation({parentToChild, modeChange}: any) {
 
   useEffect(() => {
     const handleScroll = () => {
-      const navbar = document.getElementById("navigation");
-      if (navbar) {
-        const scrolled = window.scrollY > navbar.clientHeight;
-        setScrolled(scrolled);
-      }
+      setScrolled(window.scrollY > 24);
     };
-
     window.addEventListener('scroll', handleScroll);
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -77,6 +67,11 @@ function Navigation({parentToChild, modeChange}: any) {
             </ListItemButton>
           </ListItem>
         ))}
+        <ListItem disablePadding>
+          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => { setMobileOpen(false); onAskChetan(); }}>
+            <ListItemText primary="Ask Chetan" />
+          </ListItemButton>
+        </ListItem>
         <ListItem disablePadding>
           <ListItemButton
             component="a"
@@ -106,43 +101,34 @@ function Navigation({parentToChild, modeChange}: any) {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar component="nav" id="navigation" className={`navbar-fixed-top${scrolled ? ' scrolled' : ''}`}>
+      <AppBar component="nav" id="navigation" className={`aurum-nav${scrolled ? ' scrolled' : ''}`} elevation={0}>
         <Toolbar className='navigation-bar'>
+          <a className="nav-brand" href="#top" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+            Chetan<span>.</span>
+          </a>
+
           <IconButton
+            className="nav-burger"
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            sx={{ display: { sm: 'none' } }}
           >
             <MenuIcon />
           </IconButton>
-          {mode === 'dark' ? (
-            <LightModeIcon onClick={() => modeChange()}/>
-          ) : (
-            <DarkModeIcon onClick={() => modeChange()}/>
-          )}
-          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+
+          <Box className="nav-links" sx={{ display: { xs: 'none', sm: 'flex' } }}>
             {navItems.map((item) => (
-              <Button key={item[0]} onClick={() => scrollToSection(item[1])} sx={{ color: '#fff' }}>
+              <Button key={item[0]} className="nav-link" onClick={() => scrollToSection(item[1])}>
                 {item[0]}
               </Button>
             ))}
-            <Button
-              href={RESUME_URL}
-              target="_blank"
-              rel="noreferrer"
-              sx={{ color: '#fff' }}
-            >
+            <Button className="nav-link" href={RESUME_URL} target="_blank" rel="noreferrer">
               Resume
             </Button>
-            <Button
-              href={GMAIL_COMPOSE_URL}
-              target="_blank"
-              rel="noreferrer"
-              sx={{ color: '#fff' }}
-            >
-              Email
+            <Button className="nav-ask" onClick={onAskChetan}>
+              ✦ Ask Chetan
             </Button>
           </Box>
         </Toolbar>
@@ -152,12 +138,10 @@ function Navigation({parentToChild, modeChange}: any) {
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
+          ModalProps={{ keepMounted: true }}
           sx={{
             display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, backgroundColor: '#14181e' },
           }}
         >
           {drawer}

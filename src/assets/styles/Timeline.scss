@@ -1,38 +1,78 @@
-.vertical-timeline span {
-    color: white;
-    font-family: 'Courier Prime', monospace;
+#history .items-container {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 100px 28px;
 }
 
-.vertical-timeline p {
-    color: rgb(39, 40, 34);
+/* dark cards for react-vertical-timeline */
+.vertical-timeline::before {
+    background: var(--border) !important;
 }
 
-.vertical-timeline-element p {
-    color: rgb(39, 40, 34);
+.vertical-timeline-element-content {
+    background: var(--surface) !important;
+    border: 1px solid var(--border);
+    border-radius: 14px !important;
+    box-shadow: none !important;
+    padding: 1.4em 1.6em !important;
+    transition: border-color 0.25s ease;
+
+    &:hover {
+        border-color: var(--gold);
+    }
 }
 
-.vertical-timeline-element h3 {
-    color: rgb(39, 40, 34);
+.vertical-timeline-element-content-arrow {
+    border-right-color: var(--border) !important;
 }
 
-.vertical-timeline-element h4 {
-    color: rgb(39, 40, 34);
+.vertical-timeline-element-icon {
+    box-shadow: 0 0 0 4px var(--bg), inset 0 2px 0 rgba(0, 0, 0, 0.08),
+        0 3px 0 4px rgba(0, 0, 0, 0.05) !important;
 }
 
-.vertical-timeline-element span {
-    color: rgb(39, 40, 34);
+.vertical-timeline-element-content .vertical-timeline-element-title {
+    font-family: var(--serif);
+    font-weight: 600;
+    color: var(--text) !important;
+    font-size: 1.2rem;
 }
 
-.vertical-timeline-element .vertical-timeline-element-date {
-    color: white;
+.vertical-timeline-element-content .vertical-timeline-element-subtitle {
+    color: var(--gold) !important;
+    font-family: var(--sans);
+    font-weight: 500;
+    margin-top: 4px;
+    display: block;
+    font-size: 0.98rem;
+}
+
+.vertical-timeline-element-content p {
+    color: var(--muted) !important;
+    font-family: var(--sans) !important;
+    font-weight: 400 !important;
+    font-size: 0.95rem;
+}
+
+.vertical-timeline-element-date {
+    color: var(--muted) !important;
+    font-family: var(--sans);
+    opacity: 0.9;
+    font-size: 0.9rem !important;
 }
 
 .svg-inline--fa {
-    color: white;
+    color: #20160a;
 }
 
 @media screen and (max-width: 1170px) {
-    .vertical-timeline-element .vertical-timeline-element-date {
-        color: rgb(39, 40, 34);
+    .vertical-timeline-element-date {
+        color: var(--muted) !important;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    #history .items-container {
+        padding: 70px 20px;
     }
 }

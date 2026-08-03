@@ -1,0 +1,70 @@
+.li-badge-hover {
+  position: relative;
+  display: inline-flex;
+
+  &--block {
+    display: block;
+  }
+}
+
+.li-badge-pop {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 12px);
+  z-index: 150;
+  width: max-content;
+  max-width: 92vw;
+  padding: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+
+  /* little pointer */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 22px;
+    border: 8px solid transparent;
+    border-top-color: var(--surface);
+  }
+
+  /* fallback shown until LinkedIn's iframe renders */
+  .badge-base {
+    min-width: 210px;
+    text-align: center;
+    padding: 6px 0;
+  }
+  .badge-base__link {
+    color: var(--gold-soft);
+    font-family: var(--sans);
+    font-weight: 600;
+  }
+
+  /* the iframe LinkedIn injects */
+  iframe {
+    display: block;
+    border-radius: 8px;
+  }
+}
+
+.li-badge-hover:hover .li-badge-pop,
+.li-badge-hover:focus-within .li-badge-pop {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+@media (hover: none) {
+  /* no hover on touch devices — keep the badge from blocking taps */
+  .li-badge-pop {
+    display: none;
+  }
+}

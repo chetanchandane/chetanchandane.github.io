@@ -146,7 +146,10 @@ function Expertise() {
     return (
     <div className="container" id="expertise">
         <div className="skills-container">
-            <h1>Expertise</h1>
+            <div className="section-head">
+                <span className="eyebrow">What I do</span>
+                <h1>Expertise</h1>
+            </div>
             <div className="skills-grid">
                 <div className="skill">
                     <FontAwesomeIcon icon={faPython} size="3x"/>
