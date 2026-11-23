@@ -38,11 +38,12 @@
   "scripts": {
     "api": "node api-server.js",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && node scripts/aao/build-aao.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "aao": "node scripts/aao/build-aao.js"
   },
   "eslintConfig": {
     "extends": [

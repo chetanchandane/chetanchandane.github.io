@@ -67,3 +67,7 @@ Production is **Vercel**: `vercel.json` rewrites `/api/*` to the serverless func
 - `BACKEND.md` — detailed chat backend setup / troubleshooting.
 - `PRD.md` — product requirements for the "Ask Chetan" feature.
 - `README.md` — template setup and GitHub Pages deploy instructions.
+
+## AAO (agent readability)
+
+CRA ships an empty `#root`, so AI crawlers and agents that don't run JS saw nothing. `npm run build` now runs `scripts/aao/build-aao.js` after `react-scripts build`, which writes into `build/`: static semantic HTML inside `#root` (React's `createRoot` replaces it on mount), real title/meta/OG tags, JSON-LD (`Person`, `ProfilePage`, `WebSite`, `ItemList` of projects), `llms.txt`, `llms-full.txt` (public subset of `knowledgeBase.js`), `sitemap.xml`, and `agent.json`. Structured facts live in `aao/facts.js` (CommonJS); keep it consistent with `knowledgeBase.js` and `src/components/Project.tsx`. `src/aao/webmcp.ts` registers WebMCP tools (`get_profile`, `list_projects`, `get_contact`, `ask_chetan`) when the browser exposes `document.modelContext`/`navigator.modelContext`; it reads `/agent.json` and is a no-op elsewhere. To keep a knowledge-base section out of `llms-full.txt`, add its heading to `PRIVATE_KB_SECTIONS` in the build script.
