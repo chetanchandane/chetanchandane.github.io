@@ -147,6 +147,26 @@ const KNOWLEDGE_BASE = `
 
 ---
 
+### 🔒 rag-data-plane: Multi-Tenant RAG on AWS (work in progress)
+- **Repo:** https://github.com/chetanchandane/rag-data-plane
+- **Status:** Work in progress. Slice 1 (ingestion) is complete; Slice 2 (query path and isolation) is largely built, with the leak matrix running in CI. Resilience (timeouts, fallbacks, circuit breakers, cache) and scale evidence (k6 load tests, SLO dashboard) are still to come.
+- **What it is:** The data plane for a planned rag-control-plane: a domain-agnostic, multi-tenant RAG ingestion and retrieval API on AWS, built to show failure handling, enforced tenant isolation, and measured quality for under $30 a month.
+- **Isolation:** Tenant and role isolation is enforced by Postgres row-level security, not application code. Tenant IDs in request bodies are ignored; identity comes from verified JWT claims.
+- **Leak matrix:** Every eval question (150 answerable, 30 unanswerable, 10 extraction attempts) is asked as six personas (2 tenants x 3 role levels). Every returned chunk is checked structurally against committed manifests and for canary tokens from other tenants or higher roles. Each persona must also retrieve every canary it is allowed to see, so an empty result cannot pass. Latest run: 1,140 requests, 0 leaks. Any leak fails the CI build.
+- **Ingestion:** Presigned S3 uploads with checksum validation, SQS with a dead-letter queue, idempotent Lambda workers, versioned chunks with an atomic active-version flip, and OpenTelemetry traces for parse, chunk, and embed.
+- **Retrieval:** Hybrid search in a single SQL query (pgvector plus full-text, fused with RRF), then reranking, abstention, and citation validation on the query endpoint.
+- **Infra:** Terraform for every AWS resource, GitHub OIDC deploys with no long-lived keys, Neon Postgres with pgvector.
+- **Tech:** Python, FastAPI, Mangum, AWS Lambda, S3, SQS, API Gateway, Neon Postgres, pgvector, asyncpg, Terraform, OpenTelemetry, GitHub Actions
+
+### 🚦 agent-gate: Regression Gate for LLM Agents
+- **Repo:** https://github.com/chetanchandane/agent-gate
+- **What it is:** A regression gate for changes to an LLM agent's behavior. Agent changes must earn acceptance through evidence. The agent under test is a fictional home-services booking and dispatch assistant (HVAC, plumbing, electrical) built with LangGraph; its behavior lives in versioned plain-text policy files, the only thing that changes between versions.
+- **How it works:** An improver LLM proposes edits to the policy files. A deterministic gate accepts an edit only if it passes four rules: R1 dev pass rate improves by a minimum gain, R2 no confirmed regression on a protected safeguard set, R3 holdout pass rate holds within tolerance (the improver never sees the holdout set), and R4 mean cost and p95 latency stay within budget.
+- **Adversarial testing:** Three deliberately bad policies written by hand (always book the earliest slot, treat any mention of water as an emergency, and drop the safety guardrails) go through the exact same gate to prove it rejects bad edits.
+- **Results (one live run, numbers vary between runs):** Dev pass rate 80% to 94%, safeguard 83% to 100%, holdout held at about 95%. Emergency category 66% to 100%, multi-issue 25% to 100%. Six candidates rejected, including all three adversarial policies.
+- **Engineering:** Run cache, hard spend cap, OpenTelemetry tracing, static HTML report, offline test suite (ruff, mypy, pytest), and a GitHub Actions workflow that gates every policy pull request and posts the R1 to R4 decision table as a PR comment.
+- **Tech:** Python, LangGraph, Anthropic Claude, OpenTelemetry, pytest, mypy, ruff, uv, GitHub Actions
+
 ### 🏥 TriageAI — Agentic Clinical Triage System (RIT Master's Capstone)
 **Status:** Completed.
 **Aliases:** Agentic Patient Portal, AI triage portal, multi-agent triage system, clinical triage agent

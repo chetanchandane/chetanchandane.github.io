@@ -97,6 +97,7 @@ function jsonLd() {
             url: p.url,
             description: p.description,
             keywords: p.tech.join(', '),
+            ...(p.status ? { creativeWorkStatus: p.status } : {}),
             author: { '@id': `${SITE_URL}/#person` },
           },
         })),

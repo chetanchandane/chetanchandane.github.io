@@ -117,6 +117,21 @@ const projects = [
     tech: ['FastAPI', 'Claude', 'Qdrant', 'BM25', 'HyDE', 'Cohere Rerank', 'Ragas', 'LangSmith'],
   },
   {
+    name: 'rag-data-plane: Multi-Tenant RAG on AWS',
+    url: 'https://github.com/chetanchandane/rag-data-plane',
+    status: 'Work in progress',
+    description:
+      'Work in progress. Multi-tenant RAG ingestion and retrieval API on AWS, where tenant and role isolation is enforced by Postgres row-level security. A CI leak matrix asks every eval question as six tenant and role personas and checks every returned chunk for cross-tenant canary tokens: 1,140 requests, 0 leaks. Ingestion runs through S3, SQS with a dead-letter queue, and idempotent Lambda workers. Resilience and load-testing slices are in progress.',
+    tech: ['Python', 'FastAPI', 'AWS Lambda', 'S3', 'SQS', 'Neon Postgres', 'pgvector', 'Terraform', 'OpenTelemetry'],
+  },
+  {
+    name: 'agent-gate: Regression Gate for LLM Agents',
+    url: 'https://github.com/chetanchandane/agent-gate',
+    description:
+      "An improver LLM proposes edits to an agent's versioned policy files, and a deterministic gate accepts one only if it improves a dev set, breaks nothing in a protected safeguard set, holds on a hidden holdout set, and stays within cost and latency budgets. Dev pass rate rose from 80% to 94% and safeguards from 83% to 100%, while 6 candidate edits were rejected, including 3 deliberately bad hand-written policies. Runs as a GitHub Actions check on every policy PR.",
+    tech: ['Python', 'LangGraph', 'Claude', 'OpenTelemetry', 'pytest', 'GitHub Actions'],
+  },
+  {
     name: 'TriageAI: Agentic Clinical Triage',
     url: 'https://github.com/chetanchandane/TriageAI',
     description:

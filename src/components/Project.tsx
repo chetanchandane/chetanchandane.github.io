@@ -9,6 +9,8 @@ import aws_mock02 from '../assets/images/aws_mock02.png';
 import triage_ai from '../assets/images/triage_ai.png';
 import bhartix from '../assets/images/bhartix.jpg';
 import doc_stream from '../assets/images/doc_stream.jpg';
+import agent_gate from '../assets/images/agent_gate.png';
+import rag_data_plane from '../assets/images/rag_data_plane.png';
 // import mock08 from '../assets/images/mock08.png';
 // import mock09 from '../assets/images/mock09.png';
 // import mock10 from '../assets/images/mock10.png';
@@ -42,6 +44,18 @@ function Project() {
                 <a href="https://github.com/chetanchandane/rag" target="_blank" rel="noreferrer"><h2>Clinical Trial Compliance RAG</h2></a>
                 <p>Production RAG over FDA/ICH regulatory documents that answers compliance questions with fully source-cited answers. HyDE + hybrid BM25/dense search, RRF fusion, and Cohere reranking lift Context Precision +37% and Recall +24%; a Ragas CI gate blocks regressing deploys.</p>
                 <p className="tech-stack"><span className="tech-label">Tech: </span>FastAPI · Claude · Qdrant · OpenAI Embeddings · BM25 · HyDE · Cohere Rerank · RRF · Ragas · LangSmith · GitHub Actions · Docker</p>
+            </div>
+            <div className="project">
+                <a href="https://github.com/chetanchandane/rag-data-plane" target="_blank" rel="noreferrer"><img src={rag_data_plane} className="zoom" alt="rag-data-plane: multi-tenant RAG on AWS" width="100%"/></a>
+                <a href="https://github.com/chetanchandane/rag-data-plane" target="_blank" rel="noreferrer"><h2>rag-data-plane: Multi-Tenant RAG on AWS <span className="wip-tag">Work in progress</span></h2></a>
+                <p>Multi-tenant RAG ingestion and retrieval API on AWS, where tenant and role isolation is enforced by Postgres row-level security instead of application code. A CI leak matrix asks every eval question as six tenant and role personas and checks every returned chunk for cross-tenant canary tokens: 1,140 requests, 0 leaks. Ingestion runs through S3, SQS with a dead-letter queue, and idempotent Lambda workers. Resilience and load-testing slices are in progress.</p>
+                <p className="tech-stack"><span className="tech-label">Tech: </span>Python · FastAPI · AWS Lambda · S3 · SQS · API Gateway · Neon Postgres · pgvector · Terraform · OpenTelemetry · GitHub OIDC</p>
+            </div>
+            <div className="project">
+                <a href="https://github.com/chetanchandane/agent-gate" target="_blank" rel="noreferrer"><img src={agent_gate} className="zoom" alt="agent-gate: regression gate for LLM agents" width="100%"/></a>
+                <a href="https://github.com/chetanchandane/agent-gate" target="_blank" rel="noreferrer"><h2>agent-gate: Regression Gate for LLM Agents</h2></a>
+                <p>An improver LLM proposes edits to an agent's versioned policy files, and a deterministic gate accepts one only if it improves a dev set, breaks nothing in a protected safeguard set, holds on a hidden holdout set, and stays within cost and latency budgets. Lifted dev pass rate from 80% to 94% and safeguards from 83% to 100%, while rejecting 6 candidate edits, including 3 deliberately bad hand-written policies. Runs as a GitHub Actions check on every policy PR.</p>
+                <p className="tech-stack"><span className="tech-label">Tech: </span>Python · LangGraph · Claude · OpenTelemetry · pytest · mypy · GitHub Actions · uv</p>
             </div>
             <div className="project">
                 <a href="https://www.github.com/chetanchandane/TriageAI" target="_blank" rel="noreferrer"><img src={triage_ai} className="zoom" alt="thumbnail" width="100%"/></a>
